@@ -44,9 +44,9 @@ $(function(){
         } 
         else{ 
             $.ajax({
-                url: "/register",
-                method: "POST",
-                data: { username: username, password: password, cpassword: cpassword}
+                url: "/login",
+                method: "GET",
+                data: { username: username, password: password}
             }).done(function( data ) {
 
                 if ( data ) {
