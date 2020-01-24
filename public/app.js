@@ -1,22 +1,28 @@
 
+
 $(function(){
 
     $("#register").on('click', function(event){
         event.preventDefault();
+        //fetching values inputted by user
         var username   = $("#username").val();
         var password   = $("#password").val();
         var cpassword  = $("#cpassword").val();
-
+        //front end validation
         if(!username || !password || !cpassword){ 
             $("#msgDiv").show().html("All fields are required.");
         } else if(cpassword != password){
             $("#msgDiv").show().html("Passowrds should match.");
         } 
         else{ 
-            $.ajax({
-                url: "/register",
+            $.ajax({//connecting to backend 
+                url: '/register',
                 method: "POST",
-                data: { username: username, password: password, cpassword: cpassword}
+                data: {
+                    username: username, 
+                    password: password, 
+                    cpassword: cpassword
+                }
             }).done(function( data ) {
 
                 if ( data ) {
@@ -34,6 +40,7 @@ $(function(){
             });
         }
     });
+
     $("#login").on('click', function(event){
         event.preventDefault();
         var username   = $("#username").val();

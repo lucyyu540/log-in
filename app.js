@@ -1,11 +1,19 @@
 //dependencies
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv/config');//to hide username and password
+require('dotenv').config({ path: '.env' });
+//require('dotenv/config');
 const bodyParser = require('body-parser');//access req.body
 const userRoute = require('./routes/users');//import route
 const indexRoute = require('./routes/index');
-const path = require('path'); 
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+
+
 
 //execute express
 const app = express(); 
@@ -14,7 +22,9 @@ const app = express();
 app.use('/users/', userRoute);
 app.use('/', indexRoute);
 app.use(bodyParser.json());
-app.use(express.static('public'));//connecting to jquery files
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+//app.use(express.static(path.join(__dirname, 'public')));//connecting to jquery files
 
 
 //connect to DB
