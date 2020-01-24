@@ -52,11 +52,12 @@ router.post('/register',
 			}
 			const user = new User({
 				username: req.body.username,
-				password: req.body.password,
+				password: encpassword,
 			});
 			try {
 				const savedUser = await user.save();
-				res.json(savedUser);
+				console.log(user);
+				res.json({status : 'success', message : 'Succesfully registered user!'});
 			} catch(err) {
 				res.json({ message: err});
 			}

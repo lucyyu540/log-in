@@ -8,11 +8,7 @@ $(function(){
         var username   = $("#username").val();
         var password   = $("#password").val();
         var cpassword  = $("#cpassword").val();
-        var test = JSON.stringify({
-            "username": username,
-            "password": password,
-            "cpassword": cpassword
-        });
+        
         
         //front end validation
         if(!username || !password || !cpassword){ 
@@ -21,17 +17,20 @@ $(function(){
             $("#msgDiv").show().html("Passwords should match.");
         } 
         else{ 
-            console.log('front end validation passed now going to pass over to backend');
+            const myObj = JSON.stringify({
+                "username": username,
+                "password": password,
+                "cpassword": cpassword
+            });
             $.ajax({//connecting to backend 
                 url: 'register',
                 method: 'POST',
                 dataType:'json',
-                data:  test,
+                data: myObj,
                 contentType: "application/json; charset=utf-8"
             }).done(function( data ) {
                 if ( data ) {
                     console.log(data);//debugging
-                    console.log(test);
                     if(data.status == 'error'){
                         var errors = '<ul>';
                         $.each( data.message, function( key, value ) {
@@ -40,7 +39,7 @@ $(function(){
                         errors = errors+ '</ul>';
                         $("#msgDiv").html(errors).show();
                     }
-                    else{
+                    else{//no error
                         $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
                     }
                 }
