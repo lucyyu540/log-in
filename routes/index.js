@@ -17,13 +17,10 @@ router.use(bodyParser.json());
 //register a new user
 router.post('/register',
 	[check('username')
-	.custom( async value => {
-		try {
-			const user = await findUserByUsername(value);
-			throw new Error("User with this username already exists");	
-		} catch(err) {
-			//not found = free to take
-		}
+	.custom(value => {
+		return findUserByUsername(value).then(User => {
+
+		})
 	}),
 	
 	check('password')
