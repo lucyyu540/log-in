@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv/config');//to hide username and password
 const bodyParser = require('body-parser');//access req.body
 const userRoute = require('./routes/users');//import route
+const path = require('path'); 
 
 //execute express
 const app = express(); 
@@ -11,6 +12,7 @@ const app = express();
 //middleware
 app.use('/users/', userRoute);
 app.use(bodyParser.json());
+app.use(express.static('public'));//connecting to jquery files
 
 
 //connect to DB
