@@ -8,24 +8,30 @@ $(function(){
         var username   = $("#username").val();
         var password   = $("#password").val();
         var cpassword  = $("#cpassword").val();
+        var test = JSON.stringify({
+            "username": username,
+            "password": password,
+            "cpassword": cpassword
+        });
+        
         //front end validation
         if(!username || !password || !cpassword){ 
             $("#msgDiv").show().html("All fields are required.");
         } else if(cpassword != password){
-            $("#msgDiv").show().html("Passowrds should match.");
+            $("#msgDiv").show().html("Passwords should match.");
         } 
         else{ 
+            console.log('front end validation passed now going to pass over to backend');
             $.ajax({//connecting to backend 
-                url: '/register',
-                method: "POST",
-                data: {
-                    username: username, 
-                    password: password, 
-                    cpassword: cpassword
-                }
+                url: 'register',
+                method: 'POST',
+                dataType:'json',
+                data:  test,
+                contentType: "application/json; charset=utf-8"
             }).done(function( data ) {
-
                 if ( data ) {
+                    console.log(data);//debugging
+                    console.log(test);
                     if(data.status == 'error'){
                         var errors = '<ul>';
                         $.each( data.message, function( key, value ) {
@@ -33,7 +39,8 @@ $(function(){
                         });
                         errors = errors+ '</ul>';
                         $("#msgDiv").html(errors).show();
-                    }else{
+                    }
+                    else{
                         $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
                     }
                 }
@@ -43,8 +50,8 @@ $(function(){
 
     $("#login").on('click', function(event){
         event.preventDefault();
-        var username   = $("#username").val();
-        var password   = $("#password").val();
+        var username   = $("#rusername").val();
+        var password   = $("#rpassword").val();
 
         if(!username || !password){ 
             $("#msgDiv").show().html("All fields are required.");
