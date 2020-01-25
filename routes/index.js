@@ -61,17 +61,17 @@ router.post('/register',
 		}
 });
 
-/** 
-//log in
+
 router.get('/login', async (req, res) =>  {
 	try {
-		const user = await User.findById();////??????????????
-		res.json(savedUser);
+		const user = await User.findOne({"username": username})////??????????????
+		console.log('user found!');
+		res.json({status : 'success', message : 'Successfully logged in!'});
 	} catch(err) {
 		res.json({ message: err});
 	}
 });
-*/
+
 
 function findUserByUsername(username) {
 	if(username) {
@@ -79,7 +79,19 @@ function findUserByUsername(username) {
 			User.findOne({username: username})
 			.exec((err, doc) => {
 				if (err) return reject(err)
-				if (doc) return reject(new Error ('This username is taken'))
+				if (doc) return reject(new Error ('This username is taken. Please enter another username.'))
+				else return resolve(username)
+			})
+		})
+	}
+}
+function findUser(username) {
+	if(username) {
+		return new Promise((resolve, reject) => {
+			User.findOne({username: username})
+			.exec((err, doc) => {
+				if (err) return reject(err)
+				if (doc) return resolve()
 				else return resolve(username)
 			})
 		})

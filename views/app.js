@@ -37,7 +37,7 @@ $(function(){
                             errors = errors +'<li>'+value.msg+'</li>';
                         });
                         errors = errors+ '</ul>';
-                        $("#msgDiv").html(errors).show();
+                        $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(errors).show();
                     }
                     else{//no error
                         $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
@@ -52,16 +52,28 @@ $(function(){
         var username   = $("#rusername").val();
         var password   = $("#rpassword").val();
 
-        if(!username || !password){ 
-            $("#msgDiv").show().html("All fields are required.");
+        if(!username){ 
+            $("#msgDiv").show().html("Username is required.");
         } 
+        else if (!password) {
+            $("#msgDiv").show().html("Password is required.");
+        }
+        else if (!username && !password) {
+            $("#msgDiv").show().html("Username and password are required.");
+        }
         else{ 
+            const myObject = JSON.stringify({
+                "username" : username,
+                "password" : password
+            });
             $.ajax({
                 url: "/login",
                 method: "GET",
-                data: { username: username, password: password}
-            }).done(function( data ) {
+                dataType: 'json',
+                data: myObject,
+                contentType: "application/json; charset=utf-8"
 
+            }).done(function( data ) {
                 if ( data ) {
                     if(data.status == 'error'){
                         var errors = '<ul>';
@@ -69,7 +81,7 @@ $(function(){
                             errors = errors +'<li>'+value.msg+'</li>';
                         });
                         errors = errors+ '</ul>';
-                        $("#msgDiv").html(errors).show();
+                        $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(errors).show();
                     }else{
                         $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
                     }
