@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+		<link type = 'text/css', href='../style.css'>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
+            <div class="col-sm" id = 'items'></div>
+        </div>
+
+    </body>
+    
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $( window ).on( "load", function() {
+            console.log( "window loaded" );
+            event.preventDefault();
+            $.ajax( {
+                url:'/users/:id/list',
+                method: 'POST',
+            }).done(function(read) {
+                
+
+            })
+
+        });
+        $(function() {
+
+
+        });
+    </script>
+
+</html>

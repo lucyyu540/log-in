@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon ./bin/www"
   },
   "author": "",
   "license": "ISC",
@@ -19,10 +19,14 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "express-validator": "^6.3.1",
+    "http": "0.0.0",
     "jquery": "^3.4.1",
     "mongoose": "^5.8.9",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.2",
-    "serve-favicon": "^2.5.0"
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "serve-favicon": "^2.5.0",
+    "serve-static": "^1.14.1"
   }
 }

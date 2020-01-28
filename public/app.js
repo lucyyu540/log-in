@@ -1,7 +1,7 @@
 
 
 $(function(){
-
+    /**REGISTER */
     $("#register").on('click', function(event){
         event.preventDefault();
         //fetching values inputted by user
@@ -12,9 +12,9 @@ $(function(){
         
         //front end validation
         if(!username || !password || !cpassword){ 
-            $("#msgDiv").show().html("All fields are required.");
+            $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("All fields are required.");
         } else if(cpassword != password){
-            $("#msgDiv").show().html("Passwords should match.");
+            $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Passwords should match.");
         } 
         else{ 
             const myObj = JSON.stringify({
@@ -42,49 +42,57 @@ $(function(){
                     else{//no error
                         $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
                     }
+                    $('#register-form')[0].reset();
                 }
             });
         }
     });
 
+    /**LOG IN */
     $("#login").on('click', function(event){
         event.preventDefault();
         var username   = $("#rusername").val();
         var password   = $("#rpassword").val();
-
-        if(!username){ 
-            $("#msgDiv").show().html("Username is required.");
+        if (!username && !password) {
+            $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Username and password are required.");
+        }
+        else if(!username){ 
+            $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Username is required.");
         } 
         else if (!password) {
-            $("#msgDiv").show().html("Password is required.");
+            $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Password is required.");
         }
-        else if (!username && !password) {
-            $("#msgDiv").show().html("Username and password are required.");
-        }
+       
         else{ 
-            const myObject = JSON.stringify({
-                "username" : username,
-                "password" : password
+            const user = JSON.stringify({
+                username : username,
+                password : password
             });
             $.ajax({
-                url: "/login",
-                method: "GET",
+                url: '/login',
+                method: 'POST',
                 dataType: 'json',
-                data: myObject,
-                contentType: "application/json; charset=utf-8"
-
+                data: user,
+                contentType: "application/json; charset=utf-8",
+                /** 
+                success: function(data, textStatus) {
+                    if (data.redirect) {
+                        // data.redirect contains the string URL to redirect to
+                        window.location = data.redirect;
+                    }
+                }*/
             }).done(function( data ) {
                 if ( data ) {
                     if(data.status == 'error'){
-                        var errors = '<ul>';
-                        $.each( data.message, function( key, value ) {
-                            errors = errors +'<li>'+value.msg+'</li>';
-                        });
-                        errors = errors+ '</ul>';
-                        $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(errors).show();
-                    }else{
-                        $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
+
+                        $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(data.message).show();
                     }
+                    else{//status == success
+                        console.log('redirecting');
+                        window.location = data.redirect;
+                        //$("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
+                    }
+                    $('#login-form')[0].reset();
                 }
             });
         }

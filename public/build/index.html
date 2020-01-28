@@ -2,13 +2,13 @@
 <html>
     <head>
         <title>Log In</title>
-		<link rel = 'stylesheet', href='style.css'>
+        <link rel = 'stylesheet', href='../style.css'>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     </head>
     <body>
         <div class="container">
             <h2 class="text-center top-buffer">Log In</h2>
-            <form class="form-horizontal" role="form" method="get">
+            <form class="form-horizontal" role="form" method="get" id = "login-form">
                 <div class="form-group">
                     <div class="alert alert-danger" role="alert" id="msgDiv"></div>
                 </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="container">
             <h2 class="text-center top-buffer">Register</h2>
-            <form class="form-horizontal" role="form" method="post">
+            <form class="form-horizontal" role="form" method="post" id = 'register-form'>
                 <div class="form-group">
                     <div class="alert alert-danger" role="alert" id="msgDiv"></div>
                 </div>
@@ -52,6 +52,6 @@
     </body>
     
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="app.js"></script>
+    <script src="../app.js"></script>
 
 </html>
