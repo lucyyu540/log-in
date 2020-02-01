@@ -10,6 +10,7 @@ const usersRoute = require('../routes/users');
 
 const router = express.Router();
 router.use(express.static(path.join(__dirname, '../public/build')));
+router.use(express.static(path.join(__dirname, '../public')));
 router.use('/users', usersRoute);
 
 
@@ -39,7 +40,6 @@ router.post('/register',
 		}
 	})]
 	, async (req, res) =>  {
-		console.log(req.body);
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {//if errors exist
 			res.json({status : "error", message : errors.array()});//display errors
@@ -59,7 +59,6 @@ router.post('/register',
 			//saving new user
 			try {
 				const savedUser = await user.save();
-				console.log(savedUser);
 				res.json({status : 'success', message : 'Succesfully registered user!'});
 			} catch(err) {
 				res.json({ message: err});

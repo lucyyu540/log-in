@@ -1,15 +1,52 @@
-
 <!DOCTYPE html>
 <html>
     <head>
         <title>Home</title>
-		<link type = 'text/css', href='../style.css'>
+		<link rel = "stylesheet" type="text/css" href='../style.css'>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     </head>
     <body>
+        <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
+
+        <div class = "container" id = 'home-summary'>
+            <div class = "row" id = 'home-summary-row'>
+                <div class = "col-4">Total Earnings </div>
+                <div class="col-8" id = 'earnings'></div>
+            </div>
+            <div class = "row" id = 'home-summary-row'>
+                <div class = "col-4">Total Spendings </div>
+                <div class="col-8" id = 'spendings'></div>
+            </div>
+
+        </div>
         <div class="container">
-            <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
-            <div class="col-sm" id = 'items'></div>
+            <form class="form-horizontal" role="form" method="get" id="earning-form">
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert" id="msgDiv"></div>
+                </div>
+
+                <div class="form-group"><label class="col-sm-3 control-label" for="earning"> <strong>Earning</strong></label>
+                    <div class="col-sm-9"><input class="form-control" id="earning" type="text" placeholder="Enter new earning" autofocus="" value="" /></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9 col-sm-offset-3"><button class="btn btn-primary btn-block" id="enterEarning" type="e">Enter</button></div>
+                </div>
+                
+            </form>
+
+
+            <form class="form-horizontal" role="form" method="get" id = "spending-form">
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert" id="msgDiv" ></div>
+                </div>
+                <div class="form-group"><label class="col-sm-3 control-label" for="spending"> <strong>Spending</strong></label>
+                    <div class="col-sm-9"><input class="form-control" id="spending" type="text" placeholder="Enter new spending" autofocus="" value="" /></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9 col-sm-offset-3"><button class="btn btn-primary btn-block" id="enterSpending" type="e">Enter</button></div>
+                </div>
+                
+            </form>
         </div>
 
     </body>
@@ -23,14 +60,75 @@
                 url:'/users/:id/list',
                 method: 'POST',
             }).done(function(read) {
-                
+                var username = read.username;
+                var earnings = read.earnings;
+                var spendings = read.spendings;
+
+                $('#welcome-message').html('Welcome ' + username + '!');
+                console.log(earnings);
+                if(earnings.length != 0) {//exists
+                    var sum = 0;
+                    $.each(earnings, (index, value) => {
+                        $.each(value, (key, value)=> {
+                            if (key == 'amount') {
+                                sum = sum + parseInt(value) ;
+                            }
+                        });
+                    });
+                    $('#earnings').html(sum);
+                }
+                else {
+                    $('#earnings').html('No Earnings!');
+                }
+                console.log(spendings);
+                if(spendings.length != 0) {//exists
+                    var sum = 0;
+                    $.each(spendings, (index, value) => {
+                        $.each(value, (key, value)=> {
+                            if (key == 'amount') {
+                                sum = sum + parseInt(value) ;
+                            }
+                        });
+                    });
+                    $('#spendings').html(sum);
+                }
+                else {
+                    $('#spendings').html('No spendings!');
+                }
 
             })
 
         });
-        $(function() {
-
-
+        
+        $("#enterEarning").on('click', function(event){
+            event.preventDefault();
+            console.log('earning enter button clicked');
+            var amount   = $("#earning").val();
+            if (!amount) {
+                $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Amount required.");
+            }
+            else {
+                const userLog = JSON.stringify({
+                    amount : amount
+                });
+                $.ajax({
+                    url: "/users/:username/add-earning",
+                    method: "POST",
+                    dataType: "json",
+                    data: userLog,
+                    contentType: "application/json; charset=utf-8",
+                }).done(read => {
+                    if (read.status == 'error') {
+                        $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html(read.message).show();
+                    }
+                    else {//success
+                        $("#msgDiv").show().removeClass('alert-danger').addClass('alert-sucess').html(read.message).show();
+                        location.reload(true);
+                    }
+                    $('#earning-form')[0].reset();
+                });
+            }
+            
         });
     </script>
 

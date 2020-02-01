@@ -4,6 +4,7 @@ $(function(){
     /**REGISTER */
     $("#register").on('click', function(event){
         event.preventDefault();
+        console.log('clicked register button')
         //fetching values inputted by user
         var username   = $("#username").val();
         var password   = $("#password").val();
@@ -51,6 +52,7 @@ $(function(){
     /**LOG IN */
     $("#login").on('click', function(event){
         event.preventDefault();
+        console.log('clicked login button');
         var username   = $("#rusername").val();
         var password   = $("#rpassword").val();
         if (!username && !password) {

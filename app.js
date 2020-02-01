@@ -7,20 +7,21 @@ var app = express();
 
 const mongoose = require('mongoose');
 require('dotenv').config({ path: '.env' });//config username and password hiding
-
 const bodyParser = require('body-parser');//access req.body
 const cors = require('cors');//handle cross domain requests
 
 const path = require('path');
-var logger = require('morgan');//logger??????? normal config default
+var logger = require('morgan');//logger
 
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const serveStatic = require('serve-static');
 const passport = require('passport');//login authentication
 
-app.use(express.static(path.join(__dirname, 'public/build')));//view set up (where index.html is stored)
-app.use(express.static(path.join(__dirname, 'views')));//view set up (where index.html is stored)
+app.use(express.static(path.join(__dirname, 'public/build')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'models')));
+app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(logger('dev'));
 
@@ -47,9 +48,8 @@ app.use('/', indexRoute);
 
 /**ERROR */
 function checkSignIn(req, res, next) {
-    console.log(req.session.user);
     if(typeof req.session.user == undefined) {
-		console.log('not authorized redirecting to home page');
+		console.log('not authorized redirecting to log-in page');
 		res.redirect('/');
 		return;
 	}
@@ -68,11 +68,14 @@ app.use(function(err, req, res, next) {
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 });
 
+
 //connect to DB
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.DB_CONNECTION, 
 	{ useNewUrlParser: true , useUnifiedTopology: true})
 	.then(res => console.log('*successfully connected to db*'))
 	.catch(err => console.log(err))
+
+
 
 module.exports = app;

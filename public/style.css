@@ -1,6 +1,10 @@
 body {
     background-color: #eee;
 }
+@font-face {
+    font-family: Quicksand_Light;
+    src: url('../views/Quicksand_Light.otf') format("opentype");
+}
 
 *[role="form"] {
     max-width: 350px;
@@ -18,6 +22,14 @@ body {
 #msgDiv {
    display: none;
 }
-
+#home-summary {
+    background-color: rgb(210, 209, 231);
+    padding: 10px;
+    margin: 0 auto;
+    border-radius: 15px;
+}
+#home-summary-row {
+    padding: 10px;
+}
 .top-buffer { margin-top:45px; }
 

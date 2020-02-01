@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 //creating schema
-const userSchema = mongoose.Schema({
+var userSchema = mongoose.Schema({
 	username :  {
 		type: String,
 		required: true
@@ -21,7 +21,33 @@ const userSchema = mongoose.Schema({
 		type: String,
 		required: false
 	},
-	shopping : [String]
+	spendings: [{
+		amount : {
+			type: Number,
+			required: true
+		},
+		date: {
+				type: Date,
+				default: Date.now
+		},
+		tag: {
+			type: String,
+			required: false}
+		}],
+	earnings: [{
+				amount : {
+					type: Number,
+					required: true
+				},
+				date: {
+						type: Date,
+						default: Date.now
+				},
+				tag: {
+					type: String,
+					required: false}
+				}]
+
 });
 
-module.exports = mongoose.model('Users', userSchema);
+module.exports = mongoose.model('User', userSchema);
