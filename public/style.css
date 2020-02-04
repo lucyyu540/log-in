@@ -56,15 +56,27 @@ body {
 }
 #welcome-message {
     font-family: Flowerspower-Regular;
-    font-size: 15vw;
+    font-size: 19vw;
 }
 #earnings, #spendings {
     font-size: 25vw;
     font-family: DS-DIGIT;
 }
+#timeFrame {
+    color: white;
+    font-family: DS-DIGIT;
+    background-color: palevioletred;
+    text-align: center;
+}
+#chosenTimeFrame {
+    font-family: DS-DIGIT;
+    color: black;
+    text-align: center;
+}
 #home-summary-row {
     color: palevioletred;
-    font-family: DS-DIGIT;
+    text-align: center;
+    font-size: 3vw;
 }
 
 #addEarning, #addSpending {

@@ -14,15 +14,18 @@
         <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
         <div class = "container" id = 'home-summary'>
             <div class = "row" id = 'home-summary-row'>
-                <div class = "col" id = "earnings"></div>
-                <div class="col" id = 'spendings'></div>
+                <div class = "col" class="text-center">Earned</div>
+                <div class="col" class="text-center">Spent</div>
             </div>
-
             <div class = "row" id = 'home-summary-row'>
-                <div class = "col">Total earnings</div>
-                <div class="col">Total spendings</div>
+                <div class = "col" class="text-center" id = "earnings"></div>
+                <div class="col" class="text-center" id = 'spendings'></div>
             </div>
-
+            <div class = "row">
+                <div class = "col" id = 'timeFrame'><span id = '24'>the past 24 hours</span></div>
+                <div class = "col" id = 'chosenTimeFrame'><span id='7'>the past 7 days</span></div>
+                <div class = "col" id = 'timeFrame'><span id='30'>the past 30 days</span></div>
+            </div>
             <div class = "row" id = 'home-summary-row'>
                 <!-- EARNING FORM -->
                 <div class = "col">
@@ -37,10 +40,11 @@
                             <label class="col-sm-3 control-label" for="earning">Earning</label>
                         </a>
                         <!-- expand these -->
-                        <div id = 'addEarningDetails' style = 'display: none'>
+                        <div id = 'addEarningDetails' style='display: none'>
                             <input class="form-control" id="earning" type="text" placeholder="$0.00" autofocus="" value="" />
                             <select class="form-control" id="tagsEarning"></select>
                         </div>
+                        <!-- expand this if user chooses to add a tag -->
                         <input style='display:none' class='form-control' id ='newTagEarning' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
 
                     </div>
@@ -143,6 +147,17 @@
 
         });
         
+        $('#24').on('click', function(event) {
+            
+
+        });
+        $('#7').on('click', function(event) {
+
+        });
+        $('#30').on('click', function(event) {
+
+        });
+
         //hide and show earning entry details
         $('#addEarning').on('click', event => {
             if ($('#addEarningDetails').is(':visible')) {
@@ -207,9 +222,8 @@
                 $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Amount required.");
             }
             else {
-                console.log($('#tagsEarning').val());
                 var userLog;
-                if ($('#tagsEarning').val() == 'Add a new tag') {//add custom tag
+                if ($('#tagsEarning').val() == 'Add new tag') {//add custom tag
                     console.log($('#newTagEarning').val());
                     userLog = JSON.stringify({
                     amount : amount,
@@ -240,7 +254,6 @@
                         $("#msgDiv").show().removeClass('alert-danger').addClass('alert-sucess').html(read.message).show();
                         location.reload(true);
                     }
-                    $('#earning-form')[0].reset();
                 });
             }
             
@@ -284,7 +297,6 @@
                         $("#msgDiv").show().removeClass('alert-danger').addClass('alert-sucess').html(read.message).show();
                         location.reload(true);
                     }
-                    $('#earning-form')[0].reset();
                 });
             }
         });

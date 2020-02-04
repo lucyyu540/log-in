@@ -66,6 +66,7 @@ router.post('/:username/list/by-month', (req, res)=> {
 //enter new earning
 router.post('/:username/add-earning',  async (req, res) => {
     //checking for invalid inputs? 
+    console.log(req.body);
     var amount = parseFloat(req.body.amount);
     var newTag = req.body.newTag;
     var tag = req.body.tag;
