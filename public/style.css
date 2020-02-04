@@ -1,11 +1,43 @@
+
+@font-face {
+    font-family: DS-DIGIT;
+    src: url("./fonts/DS-DIGIT.eot") /* EOT file for IE */
+   }
+@font-face {
+    font-family: DS-DIGIT;
+    src: url("./fonts/DS-DIGIT.TTF") /* TTF file for CSS3 browsers */
+   }
+@font-face {
+    font-family: Quicksand_Light;
+    src: url("./fonts/Quicksand_Light.eot") /* EOT file for IE */
+   }
+@font-face {
+    font-family: Quicksand_Light;
+    src: url("./fonts/Quicksand_Light.ttf") /* TTF file for CSS3 browsers */
+   }
+@font-face {
+    font-family: Quicksand_Book;
+    src: url("./fonts/Quicksand_Book.eot") /* EOT file for IE */
+   }
+@font-face {
+    font-family: Quicksand_Book;
+    src: url("./fonts/Quicksand_Book.ttf") /* TTF file for CSS3 browsers */
+   }
+@font-face {
+    font-family: Flowerspower-Regular;
+    src: url("./fonts/Flowerspower-Regular.eot") /* EOT file for IE */
+   }
+@font-face {
+    font-family: Flowerspower-Regular;
+    src: url("./fonts/Flowerspower-Regular.ttf") /* TTF file for CSS3 browsers */
+   }
 body {
     background-color: #eee;
 }
-@font-face {
-    font-family: Quicksand_Light;
-    src: url('../views/Quicksand_Light.otf') format("opentype");
-}
+* {
+    font-family: Quicksand_Book;
 
+}
 *[role="form"] {
     max-width: 350px;
     padding: 15px;
@@ -22,14 +54,21 @@ body {
 #msgDiv {
    display: none;
 }
-#home-summary {
-    background-color: rgb(210, 209, 231);
-    padding: 10px;
-    margin: 0 auto;
-    border-radius: 15px;
+#welcome-message {
+    font-family: Flowerspower-Regular;
+    font-size: 15vw;
+}
+#earnings, #spendings {
+    font-size: 25vw;
+    font-family: DS-DIGIT;
 }
 #home-summary-row {
-    padding: 10px;
+    color: palevioletred;
+    font-family: DS-DIGIT;
+}
+
+#addEarning, #addSpending {
+    color: palevioletred;
 }
 .top-buffer { margin-top:45px; }
 

@@ -25,9 +25,32 @@ router.get('/:username',
 router.post('/:username/list', async (req, res, next) => {
     try {
         const foundUser = await User.findOne({username: req.session.user.username});
+        //default by week only
+        var earnings = foundUser.earnings;
+        var spendings = foundUser.spendings;
+        var filteredEarnings = []; 
+        var filteredSpendings = [];        
+        const d = new Date()
+        const floor = d.getTime() - 7*(1000*60*60*24); //exactly one week before
+        
+        for (var i = 0 ; i < earnings.length ; i ++) {
+            const temp = earnings[i].date.getTime();
+            if (temp > floor) {
+                filteredEarnings.push(earnings[i]);
+            }
+        }
+        for (var i = 0 ; i < spendings.length ; i ++) {
+            const temp = spendings[i].date.getTime();
+            if (temp > floor) {
+                filteredSpendings.push(spendings[i]);
+            }
+        }
+        //passing data to frontend
         res.json({username: foundUser.username, 
-            earnings: foundUser.earnings,
-            spendings: foundUser.spendings
+            earnings: filteredEarnings,
+            spendings: filteredSpendings,
+            spendingTags: foundUser.spendingTags,
+            earningTags: foundUser.earningTags
         });
 
     }
@@ -35,28 +58,90 @@ router.post('/:username/list', async (req, res, next) => {
         console.log(err);
     }
 });
+router.post('/:username/list/by-month', (req, res)=> {
+
+});
 
 
 //enter new earning
 router.post('/:username/add-earning',  async (req, res) => {
-    console.log('server for inputting new earning');
-    console.log(req.session.user);
     //checking for invalid inputs? 
     var amount = parseFloat(req.body.amount);
+    var newTag = req.body.newTag;
+    var tag = req.body.tag;
+    console.log(newTag);
+    console.log(tag);
     if (typeof amount != 'number') {
         return res.json({status: 'error', message: 'Amount must be numerical'})
     }
    var newEarning = {
        amount: amount,
+       tag: tag
    };
 
     try {
-        var user = await User.updateOne({username: req.session.user.username},
-            {$push : {earnings: newEarning}}
+        var user;
+        if (newTag == '') {
+            user = await User.updateOne({username: req.session.user.username},
+                {$push : {earnings: newEarning}}
             );
+        }
+        else {
+            user = await User.updateOne({username: req.session.user.username},
+                {$push : {earnings: newEarning}}
+            );
+            user = await User.updateOne({username: req.session.user.username},
+                {$push : {earningTags: newTag}}
+            );
+
+        }
         return res.json({status: 'success', 
                     message: 'New earning saved!',
                     amount : amount})
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+});
+//adding new spending
+router.post('/:username/add-spending',  async (req, res) => {
+    console.log('server for inputting new spending');
+    //checking for invalid inputs? 
+    var amount = parseFloat(req.body.amount);
+    var newTag = req.body.newTag;
+    var tag = req.body.tag;
+    if (typeof amount != 'number') {
+        return res.json({status: 'error', message: 'Amount must be numerical'})
+    }
+   var newSpending = {
+       amount: amount,
+       tag: tag
+   };
+
+    try {
+        var user;
+        if (newTag == '') {
+            user = await User.updateOne({username: req.session.user.username},
+                {$push : {spendings: newSpending}}
+                );
+        }
+        else {
+            console.log('before adding new tag')
+            user = await User.updateMany(
+                {username: req.session.user.username},
+                {$push : {spendingTags: newTag}}
+            );
+            user = await User.updateMany(
+                {username: req.session.user.username},
+                {$push : {spendings: newSpending}}
+            );
+
+            console.log(user);
+        }
+        return res.json({status: 'success', 
+                    message: 'New spending saved!',
+                    amount : amount});
     }
     catch (err) {
         console.log(err);

@@ -21,7 +21,7 @@ const passport = require('passport');//login authentication
 app.use(express.static(path.join(__dirname, 'public/build')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'models')));
-app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'public/fonts')));
 
 app.use(logger('dev'));
 

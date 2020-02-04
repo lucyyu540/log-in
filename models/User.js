@@ -46,7 +46,9 @@ var userSchema = mongoose.Schema({
 				tag: {
 					type: String,
 					required: false}
-				}]
+				}],
+	spendingTags: [String],
+	earningTags: [String]
 
 });
 

@@ -4,50 +4,77 @@
         <title>Home</title>
 		<link rel = "stylesheet" type="text/css" href='../style.css'>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     </head>
     <body>
+        
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-user"></span> Profile 
+          </button>
         <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
-
         <div class = "container" id = 'home-summary'>
             <div class = "row" id = 'home-summary-row'>
-                <div class = "col-4">Total Earnings </div>
-                <div class="col-8" id = 'earnings'></div>
+                <div class = "col" id = "earnings"></div>
+                <div class="col" id = 'spendings'></div>
             </div>
+
             <div class = "row" id = 'home-summary-row'>
-                <div class = "col-4">Total Spendings </div>
-                <div class="col-8" id = 'spendings'></div>
+                <div class = "col">Total earnings</div>
+                <div class="col">Total spendings</div>
+            </div>
+
+            <div class = "row" id = 'home-summary-row'>
+                <!-- EARNING FORM -->
+                <div class = "col">
+                    <!-- alert -->
+                    <div class="form-group">
+                        <div class="alert alert-danger" role="alert" id="msgDiv"></div>
+                    </div>
+                    <div class="form-group">
+                        <!-- option to expand to add a new earning -->
+                        <a href="#" id = 'addEarning'>
+                            <span id = 'sign' class="glyphicon glyphicon-plus-sign"></span>
+                            <label class="col-sm-3 control-label" for="earning">Earning</label>
+                        </a>
+                        <!-- expand these -->
+                        <div id = 'addEarningDetails' style = 'display: none'>
+                            <input class="form-control" id="earning" type="text" placeholder="$0.00" autofocus="" value="" />
+                            <select class="form-control" id="tagsEarning"></select>
+                        </div>
+                        <input style='display:none' class='form-control' id ='newTagEarning' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
+
+                    </div>
+                    <div class="form-group">
+                            <button style = 'display: none' class="btn btn-primary btn-block" id="enterEarning" type="e">Enter</button>
+                    </div>
+                </div>
+                <!-- SPENDING FORM -->
+                <div class="col">
+                    <div class="form-group">
+                        <div class="alert alert-danger" role="alert" id="msgDiv" ></div>
+                    </div>
+                    <div class="form-group">
+                        <a href='#' id = 'addSpending'>
+                            <span id = 'signSpending' class="glyphicon glyphicon-plus-sign"></span>
+                            <label class="col-sm-3 control-label" for="earning">Spending</label>
+                        </a>
+                        <div id = 'addSpendingDetails' style = 'display: none'>
+                            <input class="form-control" id="spending" type="text" placeholder="$0.00" autofocus="" value="" />
+                            <select class="form-control" id="tagsSpending"></select>
+                        </div>
+                        <input style='display:none' class='form-control' id ='newTag' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
+                    </div>
+                    <div class="form-group">
+                            <button style = 'display: none' class="btn btn-primary btn-block" id="enterSpending" type="e">Enter</button>
+                    </div>
+                </div>
+            </div>
+            <div class = 'row'>
+
             </div>
 
         </div>
-        <div class="container">
-            <form class="form-horizontal" role="form" method="get" id="earning-form">
-                <div class="form-group">
-                    <div class="alert alert-danger" role="alert" id="msgDiv"></div>
-                </div>
-
-                <div class="form-group"><label class="col-sm-3 control-label" for="earning"> <strong>Earning</strong></label>
-                    <div class="col-sm-9"><input class="form-control" id="earning" type="text" placeholder="Enter new earning" autofocus="" value="" /></div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9 col-sm-offset-3"><button class="btn btn-primary btn-block" id="enterEarning" type="e">Enter</button></div>
-                </div>
-                
-            </form>
-
-
-            <form class="form-horizontal" role="form" method="get" id = "spending-form">
-                <div class="form-group">
-                    <div class="alert alert-danger" role="alert" id="msgDiv" ></div>
-                </div>
-                <div class="form-group"><label class="col-sm-3 control-label" for="spending"> <strong>Spending</strong></label>
-                    <div class="col-sm-9"><input class="form-control" id="spending" type="text" placeholder="Enter new spending" autofocus="" value="" /></div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9 col-sm-offset-3"><button class="btn btn-primary btn-block" id="enterSpending" type="e">Enter</button></div>
-                </div>
-                
-            </form>
-        </div>
+        
 
     </body>
     
@@ -63,9 +90,10 @@
                 var username = read.username;
                 var earnings = read.earnings;
                 var spendings = read.spendings;
+                var earningTags = read.earningTags;
+                var spendingTags = read.spendingTags;
 
                 $('#welcome-message').html('Welcome ' + username + '!');
-                console.log(earnings);
                 if(earnings.length != 0) {//exists
                     var sum = 0;
                     $.each(earnings, (index, value) => {
@@ -78,9 +106,8 @@
                     $('#earnings').html(sum);
                 }
                 else {
-                    $('#earnings').html('No Earnings!');
+                    $('#earnings').html(0);
                 }
-                console.log(spendings);
                 if(spendings.length != 0) {//exists
                     var sum = 0;
                     $.each(spendings, (index, value) => {
@@ -93,13 +120,85 @@
                     $('#spendings').html(sum);
                 }
                 else {
-                    $('#spendings').html('No spendings!');
+                    $('#spendings').html(0);
                 }
+                var opts = '';
+                if (spendingTags.length > 0) {//there are tags
+                    $.each(spendingTags, (index, value) => {
+                        opts = opts + '<option>'+ value + '</option>';
+                    });
+                }
+                opts = opts + '<option>Add new tag</option>'
+                $('#tagsSpending').html(opts);
 
+                opts = '';
+                if (earningTags.length > 0) {//there are tags
+                    $.each(earningTags, (index, value) => {
+                        opts = opts + '<option>'+ value + '</option>';
+                    });
+                }
+                opts = opts + '<option>Add new tag</option>'
+                $('#tagsEarning').html(opts);
             })
 
         });
         
+        //hide and show earning entry details
+        $('#addEarning').on('click', event => {
+            if ($('#addEarningDetails').is(':visible')) {
+                $('#sign').toggleClass('glyphicon glyphicon-plus-sign').toggleClass('glyphicon glyphicon-minus-sign');
+                $('#addEarningDetails').hide();
+                $('#newTagEarning').hide();
+                $('#enterEarning').hide();
+            }
+             else {
+                $('#sign').toggleClass('glyphicon glyphicon-minus-sign').toggleClass('glyphicon glyphicon-plus-sign');
+                $('#addEarningDetails').show();
+                $('#enterEarning').show();
+                if ($('#tagsEarning').val() == 'Add new tag') {
+                    $('#newTagEarning').show();
+                }
+             }
+        });
+        
+        //hide and show spending entry details
+        $('#addSpending').on('click', event => {
+            if ($('#addSpendingDetails').is(':visible')) {
+                $('#signSpending').toggleClass('glyphicon glyphicon-plus-sign').toggleClass('glyphicon glyphicon-minus-sign');
+                $('#addSpendingDetails').hide();
+                $('#newTag').hide();
+                $('#enterSpending').hide();
+            }
+             else {
+                $('#signSpending').toggleClass('glyphicon glyphicon-minus-sign').toggleClass('glyphicon glyphicon-plus-sign');
+                $('#addSpendingDetails').show();
+                if ($('#tagsSpending').val() == 'Add new tag') {
+                    $('#newTag').show();
+                }
+                $('#enterSpending').show();
+
+             }
+        });
+        
+        //custom new tag hide and show
+        $('#tagsEarning').change( event => {
+            if ($('#tagsEarning').val() == 'Add new tag') {
+                    $('#newTagEarning').show();
+                }
+            else {
+                $('#newTagEarning').hide();
+            }
+        });
+        $('#tagsSpending').change( event => {
+            if ($('#tagsSpending').val() == 'Add new tag') {
+                    $('#newTag').show();
+                }
+            else {
+                $('#newTag').hide();
+            }
+        });
+        
+        //sending earning entry to backend
         $("#enterEarning").on('click', function(event){
             event.preventDefault();
             console.log('earning enter button clicked');
@@ -108,9 +207,25 @@
                 $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Amount required.");
             }
             else {
-                const userLog = JSON.stringify({
-                    amount : amount
-                });
+                console.log($('#tagsEarning').val());
+                var userLog;
+                if ($('#tagsEarning').val() == 'Add a new tag') {//add custom tag
+                    console.log($('#newTagEarning').val());
+                    userLog = JSON.stringify({
+                    amount : amount,
+                    tag : $('#newTagEarning').val(),
+                    newTag : $('#newTagEarning').val()
+                    });
+                }
+                else {
+                    userLog = JSON.stringify({//use old tag
+                    amount : amount,
+                    tag : $('#tagsEarning').val(),
+                    newTag : ''
+                    });
+
+                }
+                
                 $.ajax({
                     url: "/users/:username/add-earning",
                     method: "POST",
@@ -130,6 +245,50 @@
             }
             
         });
+    
+        //sending spending entry to backend
+        $('#enterSpending').on('click', function(event) {
+            event.preventDefault();
+            console.log('earning enter button clicked');
+            var amount   = $("#spending").val();
+            if (!amount) {
+                $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html("Amount required.");
+            }
+            else {
+                var userLog;
+                if ($('#tagsSpending').val() == 'Add new tag'){
+                    userLog = JSON.stringify({
+                    amount : amount,
+                    newTag: $('#newTag').val(),
+                    tag : $('#newTag').val()
+                    });
+                }
+                else {
+                    userLog = JSON.stringify({
+                    amount : amount,
+                    newTag : '',
+                    tag: $('#tagsSpending').val()
+                    });
+                }
+                $.ajax({
+                    url: "/users/:username/add-spending",
+                    method: "POST",
+                    dataType: "json",
+                    data: userLog,
+                    contentType: "application/json; charset=utf-8",
+                }).done(read => {
+                    if (read.status == 'error') {
+                        $("#msgDiv").show().removeClass('alert-sucess').addClass('alert-danger').html(read.message).show();
+                    }
+                    else {//success
+                        $("#msgDiv").show().removeClass('alert-danger').addClass('alert-sucess').html(read.message).show();
+                        location.reload(true);
+                    }
+                    $('#earning-form')[0].reset();
+                });
+            }
+        });
+    
     </script>
 
 </html>
