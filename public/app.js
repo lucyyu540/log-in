@@ -76,25 +76,15 @@ $(function(){
                 dataType: 'json',
                 data: user,
                 contentType: "application/json; charset=utf-8",
-                /** 
-                success: function(data, textStatus) {
-                    if (data.redirect) {
-                        // data.redirect contains the string URL to redirect to
-                        window.location = data.redirect;
-                    }
-                }*/
             }).done(function( data ) {
                 if ( data ) {
                     if(data.status == 'error'){
-
                         $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(data.message).show();
+                        $('#login-form')[0].reset();
                     }
-                    else{//status == success
-                        console.log('redirecting');
+                    else{//status == success        
                         window.location = data.redirect;
-                        //$("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(data.message).show(); 
                     }
-                    $('#login-form')[0].reset();
                 }
             });
         }

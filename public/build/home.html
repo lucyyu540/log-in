@@ -22,9 +22,9 @@
                 <div class="col" class="text-center" id = 'spendings'></div>
             </div>
             <div class = "row">
-                <div class = "col" id = 'timeFrame'><span id = '24'>the past 24 hours</span></div>
-                <div class = "col" id = 'chosenTimeFrame'><span id='7'>the past 7 days</span></div>
-                <div class = "col" id = 'timeFrame'><span id='30'>the past 30 days</span></div>
+                <div class = "col timeFrame" id = '24'>the past 24 hours</div>
+                <div class = "col chosenTimeFrame" id = '7'>the past 7 days</div>
+                <div class = "col timeFrame" id ='30'>the past 30 days</div>
             </div>
             <div class = "row" id = 'home-summary-row'>
                 <!-- EARNING FORM -->
@@ -96,8 +96,9 @@
                 var spendings = read.spendings;
                 var earningTags = read.earningTags;
                 var spendingTags = read.spendingTags;
-
+                //welcome message
                 $('#welcome-message').html('Welcome ' + username + '!');
+                //displaying earnings
                 if(earnings.length != 0) {//exists
                     var sum = 0;
                     $.each(earnings, (index, value) => {
@@ -112,6 +113,7 @@
                 else {
                     $('#earnings').html(0);
                 }
+                //displaying spendings
                 if(spendings.length != 0) {//exists
                     var sum = 0;
                     $.each(spendings, (index, value) => {
@@ -148,14 +150,42 @@
         });
         
         $('#24').on('click', function(event) {
-            
-
+            if (this.className == 'col chosenTimeFrame') {//do nothing
+            }
+            else if ( $('#7').attr('class') == 'col chosenTimeFrame') {
+                $('#24').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
+                $('#7').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
+            }
+            else {//30 == chosentimeframe
+                $('#24').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
+                $('#30').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
+            }
         });
+
         $('#7').on('click', function(event) {
+            if (this.className == 'col chosenTimeFrame') {//do nothing
+            }
+            else if ( $('#24').attr('class') == 'col chosenTimeFrame') {
+                $('#7').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
+                $('#24').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
+            }
+            else {//30 == chosentimeframe
+                $('#7').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
+                $('#30').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
+            }
 
         });
         $('#30').on('click', function(event) {
-
+            if (this.className == 'col chosenTimeFrame') {//do nothing
+            }
+            else if ( $('#7').attr('class') == 'col chosenTimeFrame') {
+                $('#30').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
+                $('#7').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
+            }
+            else {//24 == chosentimeframe
+                $('#30').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
+                $('#24').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
+            }
         });
 
         //hide and show earning entry details

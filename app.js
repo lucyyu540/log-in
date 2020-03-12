@@ -3,7 +3,9 @@
 const userRoute = require('./routes/users');
 const indexRoute = require('./routes/index');
 const express = require('express');
-var app = express(); 
+var app = express(); //initialize app variable
+ 
+const jwt = require('jsonwebtoken');//token
 
 const mongoose = require('mongoose');
 require('dotenv').config({ path: '.env' });//config username and password hiding
@@ -15,7 +17,6 @@ var logger = require('morgan');//logger
 
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const serveStatic = require('serve-static');
 const passport = require('passport');//login authentication
 
 app.use(express.static(path.join(__dirname, 'public/build')));
@@ -47,13 +48,37 @@ app.use('/', indexRoute);
 
 
 /**ERROR */
+//middleware function verifying token for all protected endpoints
 function checkSignIn(req, res, next) {
+	//get auth header value
+	console.log('in middleware function checksignin: ');
+	console.log(req.cookies);
+	const token = req.cookies.token;
+	//check if token is undefined
+	if (token != undefined) {
+		console.log('token exists in cookies');
+		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+			if (err) {
+				res.clearCookie('token');
+				res.send(401, 'Invalid or missing token').end();
+			}
+			else {
+				res.locals.user = user;//lifetime of the reqest
+				next();//proceed
+			}
+			
+		})
+	}
+	else {
+		return res.send(401, 'Invalid or missing token');
+	}
+	/** 
     if(typeof req.session.user == undefined) {
 		console.log('not authorized redirecting to log-in page');
 		res.redirect('/');
 		return;
 	}
-    next();
+    next();*/
 }
 
 app.use(function(req, res, next) {

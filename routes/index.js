@@ -7,6 +7,9 @@ const {matchedData, sanitize} = require('express-validator');
 const passport = require('../config/passport')
 var path = require('path');
 const usersRoute = require('../routes/users');
+const jwt = require('jsonwebtoken');//token
+require('dotenv').config();
+
 
 const router = express.Router();
 router.use(express.static(path.join(__dirname, '../public/build')));
@@ -84,47 +87,41 @@ router.post('/login', async (req, res) =>  {
 		const username = req.body.username;
 		const password = encpassword;
 
-		//authenticate user
+		//check username and password
 		try {
 			const user = await User.findOne({username: username});
 			if(user.password != password) {
 				return res.json({status: 'error', message : 'Incorrect password.'});
 			}
-			//res.json({status: 'success', message : 'Successfully logged in!'});
+			//redirect url
 			const url = '/users/'+username;
+			/** 
 			req.session.user = user; //store to session
 			req.session.save(function(err) {//save
 				if(err) {
 				  res.end('session save error: ' + err)
 				  return
 				}
-			return res.json({status: 'success', redirect: url});//redirecting to protected page
-			})
+			
+			return res.json({status: 'success', redirect: url});
+			})*/
+
+			//generating a token and sending to client
+			jwt.sign({user: user}, process.env.ACCESS_TOKEN_SECRET, (err, token) => {
+				console.log('/login: sending token');
+				const cookieOptions = {
+					httpOnly: true,
+					expires: 0 
+				   };
+				res.cookie('token', token, cookieOptions);
+				//res.redirect(url);
+				res.json({status: 'success', redirect: url});
+			});
 		}
 		catch (err) {
 			res.json({status: 'error', message: 'Invalid username.'});
 		}
-
-
-		//authenticate user
-		/** 
-		passport.authenticate('local', 
-			{session: false, // API servers typically require credentials to be supplied with each request
-			successRedirect: '/', 
-			failureRedirect: '/login',
-			}, 
-			function(err, user, info) {
-			if (err) {return next(err);}
-			if (user) {
-
-			}
-		})
-		const user = await User.findOne({username: username});
-		res.json({status : 'success', message : 'Successfully logged in!'});
-	} catch(err) {
-		res.json({ status : 'error', message : 'Wrong username or password. Please try again.'});
-	}
-	*/
+		
 });
 
 

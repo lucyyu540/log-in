@@ -2,30 +2,32 @@ const express = require('express');
 //DB models
 const mongoose = require('mongoose');
 const User = require('../models/User');
-const { check, validationResult } = require("express-validator");//middleware btw frontend request and backend processor
 
 const router = express.Router();
 var path = require('path');
 
 
-//register a new user
 router.get('/:username',
-     (req, res, next) => {
-    res.sendFile('home.html', 
-    {root: path.join(__dirname+ '/../public/build')},
-    function(err) {
-        if (err) {
-            console.log('home page cannot load');
-            res.status(err.status).end();
-        }
-    });
+     (req, res) => {
+        console.log('in endpoint users/username. now rendering home page');
+        res.sendFile('home.html', 
+            {root: path.join(__dirname+ '/../public/build')},
+            err => {
+                if (err) {
+                    console.log('home page cannot load');
+                    res.status(err.status).end();
+                }
+                console.log('in res.sendFile');
+            });
 });
 
 //on home page loading, 
 router.post('/:username/list', async (req, res, next) => {
+    console.log('on home page load, list');
     try {
-        const foundUser = await User.findOne({username: req.session.user.username});
+        const foundUser = await User.findOne({username: res.locals.user.user.username});
         //default by week only
+        console.log('user found: ' + foundUser);
         var earnings = foundUser.earnings;
         var spendings = foundUser.spendings;
         var filteredEarnings = []; 
@@ -33,13 +35,13 @@ router.post('/:username/list', async (req, res, next) => {
         const d = new Date()
         const floor = d.getTime() - 7*(1000*60*60*24); //exactly one week before
         
-        for (var i = 0 ; i < earnings.length ; i ++) {
+        for (var i = earnings.length-1 ; i >= 0 ; i --) {
             const temp = earnings[i].date.getTime();
             if (temp > floor) {
                 filteredEarnings.push(earnings[i]);
             }
         }
-        for (var i = 0 ; i < spendings.length ; i ++) {
+        for (var i = spendings.length-1 ; i >= 0 ; i --) {
             const temp = spendings[i].date.getTime();
             if (temp > floor) {
                 filteredSpendings.push(spendings[i]);
@@ -58,7 +60,10 @@ router.post('/:username/list', async (req, res, next) => {
         console.log(err);
     }
 });
-router.post('/:username/list/by-month', (req, res)=> {
+router.post('/:username/list/30-days', (req, res)=> {
+
+});
+router.post('/:username/list/24-hours', (req, res)=> {
 
 });
 
@@ -81,21 +86,12 @@ router.post('/:username/add-earning',  async (req, res) => {
    };
 
     try {
-        var user;
-        if (newTag == '') {
-            user = await User.updateOne({username: req.session.user.username},
-                {$push : {earnings: newEarning}}
-            );
+        var user = await User.findOne({username: res.locals.user.user.username});
+        user.earnings.push(newEarning);
+        if (newTag != '') {
+            user.earningTags.push(newTag);
         }
-        else {
-            user = await User.updateOne({username: req.session.user.username},
-                {$push : {earnings: newEarning}}
-            );
-            user = await User.updateOne({username: req.session.user.username},
-                {$push : {earningTags: newTag}}
-            );
-
-        }
+        user.save();
         return res.json({status: 'success', 
                     message: 'New earning saved!',
                     amount : amount})
@@ -121,25 +117,13 @@ router.post('/:username/add-spending',  async (req, res) => {
    };
 
     try {
-        var user;
-        if (newTag == '') {
-            user = await User.updateOne({username: req.session.user.username},
-                {$push : {spendings: newSpending}}
-                );
-        }
-        else {
+        var user = await User.findOne({username: res.locals.user.user.username});
+        user.spendings.push(newSpending);
+        if (newTag != '') {
             console.log('before adding new tag')
-            user = await User.updateMany(
-                {username: req.session.user.username},
-                {$push : {spendingTags: newTag}}
-            );
-            user = await User.updateMany(
-                {username: req.session.user.username},
-                {$push : {spendings: newSpending}}
-            );
-
-            console.log(user);
+            user.spendingTags.push(newTag);
         }
+        user.save();
         return res.json({status: 'success', 
                     message: 'New spending saved!',
                     amount : amount});

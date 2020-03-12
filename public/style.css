@@ -62,13 +62,13 @@ body {
     font-size: 25vw;
     font-family: DS-DIGIT;
 }
-#timeFrame {
+.timeFrame {
     color: white;
     font-family: DS-DIGIT;
     background-color: palevioletred;
     text-align: center;
 }
-#chosenTimeFrame {
+.chosenTimeFrame {
     font-family: DS-DIGIT;
     color: black;
     text-align: center;
