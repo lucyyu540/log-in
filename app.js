@@ -52,7 +52,6 @@ app.use('/', indexRoute);
 function checkSignIn(req, res, next) {
 	//get auth header value
 	console.log('in middleware function checksignin: ');
-	console.log(req.cookies);
 	const token = req.cookies.token;
 	//check if token is undefined
 	if (token != undefined) {

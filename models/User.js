@@ -48,8 +48,8 @@ var userSchema = mongoose.Schema({
 					required: false}
 				}],
 	spendingTags: [String],
-	earningTags: [String]
-
+	earningTags: [String],
+	days: {type: Number,},
 });
 
 module.exports = mongoose.model('User', userSchema);

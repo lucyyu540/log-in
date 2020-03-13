@@ -2,7 +2,11 @@
 <html>
     <head>
         <title>Home</title>
-		<link rel = "stylesheet" type="text/css" href='../style.css'>
+        <link rel = "stylesheet" type="text/css" href='../css/style.css'>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <!-- Material Design Bootstrap -->
+        <link rel="stylesheet" href="../css/mdb.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     </head>
@@ -73,7 +77,14 @@
                     </div>
                 </div>
             </div>
-            <div class = 'row'>
+            <!-- pie charts -->
+            <div class = "row" id = 'home-summary-row'>
+                <div class="col">
+                    <canvas id="earningChart" style="max-width: 60vw;"></canvas>
+                </div>
+                <div class="col">
+                    <canvas id="spendingChart"  style="max-width: 60vw;"></canvas>
+                </div>
 
             </div>
 
@@ -81,8 +92,14 @@
         
 
     </body>
-    
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- jQuery -->
+  <script type="text/javascript" src="../js/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="../js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script>
         $( window ).on( "load", function() {
             console.log( "window loaded" );
@@ -96,38 +113,31 @@
                 var spendings = read.spendings;
                 var earningTags = read.earningTags;
                 var spendingTags = read.spendingTags;
+                var earningSorted = read.earningSorted;
+                var spendingSorted = read.spendingSorted;
+                var days = read.days;
                 //welcome message
                 $('#welcome-message').html('Welcome ' + username + '!');
-                //displaying earnings
-                if(earnings.length != 0) {//exists
-                    var sum = 0;
-                    $.each(earnings, (index, value) => {
-                        $.each(value, (key, value)=> {
-                            if (key == 'amount') {
-                                sum = sum + parseInt(value) ;
-                            }
-                        });
-                    });
-                    $('#earnings').html(sum);
+                //time frame settings
+                if (days == 1) {
+                    $('#24').addClass('chosenTimeFrame');
+                    $('#7').addClass('timeFrame');
+                    $('#30').addClass('timeFrame');
                 }
-                else {
-                    $('#earnings').html(0);
+                else if (days == 7) {
+                    $('#24').addClass('timeFrame');
+                    $('#7').addClass('chosenTimeFrame');
+                    $('#30').addClass('timeFrame');
                 }
-                //displaying spendings
-                if(spendings.length != 0) {//exists
-                    var sum = 0;
-                    $.each(spendings, (index, value) => {
-                        $.each(value, (key, value)=> {
-                            if (key == 'amount') {
-                                sum = sum + parseInt(value) ;
-                            }
-                        });
-                    });
-                    $('#spendings').html(sum);
+                else if (days == 30) {
+                    $('#24').addClass('timeFrame');
+                    $('#7').addClass('timeFrame');
+                    $('#30').addClass('chosenTimeFrame');
                 }
-                else {
-                    $('#spendings').html(0);
-                }
+                //displaying earnings and spendings
+                $('#earnings').html(earnings);
+                $('#spendings').html(spendings);
+                //displaying tags
                 var opts = '';
                 if (spendingTags.length > 0) {//there are tags
                     $.each(spendingTags, (index, value) => {
@@ -145,11 +155,45 @@
                 }
                 opts = opts + '<option>Add new tag</option>'
                 $('#tagsEarning').html(opts);
+                //pie chart
+                
+                var ec = $("#earningChart");
+                var ecDetails = new Chart(ec, {
+                type: 'doughnut',
+                data: {
+                    labels: earningTags,
+                    datasets: [{
+                        data: earningSorted,
+                        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+                        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+                });
+
+                var sc = $("#spendingChart");
+                var scDetails = new Chart(sc, {
+                type: 'doughnut',
+                data: {
+                    labels: spendingTags,
+                    datasets: [{
+                        data: spendingSorted,
+                        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+                        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+                });
             })
 
         });
         
         $('#24').on('click', function(event) {
+            event.preventDefault();
             if (this.className == 'col chosenTimeFrame') {//do nothing
             }
             else if ( $('#7').attr('class') == 'col chosenTimeFrame') {
@@ -160,9 +204,16 @@
                 $('#24').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
                 $('#30').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
             }
+            $.ajax( {
+                url:'/users/:id/list/24-hours',
+                method: 'POST',
+            }).done(function(read) {
+                location.reload(true);
+            })
         });
 
         $('#7').on('click', function(event) {
+            event.preventDefault();
             if (this.className == 'col chosenTimeFrame') {//do nothing
             }
             else if ( $('#24').attr('class') == 'col chosenTimeFrame') {
@@ -173,9 +224,17 @@
                 $('#7').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
                 $('#30').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
             }
+            $.ajax( {
+                url:'/users/:id/list/7-days',
+                method: 'POST',
+            }).done(function(read) {
+                location.reload(true);
+            })
+
 
         });
         $('#30').on('click', function(event) {
+            event.preventDefault();
             if (this.className == 'col chosenTimeFrame') {//do nothing
             }
             else if ( $('#7').attr('class') == 'col chosenTimeFrame') {
@@ -186,6 +245,12 @@
                 $('#30').toggleClass('timeFrame').toggleClass('chosenTimeFrame');
                 $('#24').toggleClass('chosenTimeFrame').toggleClass('timeFrame');
             }
+            $.ajax( {
+                url:'/users/:id/list/30-days',
+                method: 'POST',
+            }).done(function(read) {
+                location.reload(true);
+            })
         });
 
         //hide and show earning entry details

@@ -1,35 +1,35 @@
 
 @font-face {
     font-family: DS-DIGIT;
-    src: url("./fonts/DS-DIGIT.eot") /* EOT file for IE */
+    src: url("../fonts/DS-DIGIT.eot") /* EOT file for IE */
    }
 @font-face {
     font-family: DS-DIGIT;
-    src: url("./fonts/DS-DIGIT.TTF") /* TTF file for CSS3 browsers */
+    src: url("../fonts/DS-DIGIT.TTF") /* TTF file for CSS3 browsers */
    }
 @font-face {
     font-family: Quicksand_Light;
-    src: url("./fonts/Quicksand_Light.eot") /* EOT file for IE */
+    src: url("../fonts/Quicksand_Light.eot") /* EOT file for IE */
    }
 @font-face {
     font-family: Quicksand_Light;
-    src: url("./fonts/Quicksand_Light.ttf") /* TTF file for CSS3 browsers */
+    src: url("../fonts/Quicksand_Light.ttf") /* TTF file for CSS3 browsers */
    }
 @font-face {
     font-family: Quicksand_Book;
-    src: url("./fonts/Quicksand_Book.eot") /* EOT file for IE */
+    src: url("../fonts/Quicksand_Book.eot") /* EOT file for IE */
    }
 @font-face {
     font-family: Quicksand_Book;
-    src: url("./fonts/Quicksand_Book.ttf") /* TTF file for CSS3 browsers */
+    src: url("../fonts/Quicksand_Book.ttf") /* TTF file for CSS3 browsers */
    }
 @font-face {
     font-family: Flowerspower-Regular;
-    src: url("./fonts/Flowerspower-Regular.eot") /* EOT file for IE */
+    src: url("../fonts/Flowerspower-Regular.eot") /* EOT file for IE */
    }
 @font-face {
     font-family: Flowerspower-Regular;
-    src: url("./fonts/Flowerspower-Regular.ttf") /* TTF file for CSS3 browsers */
+    src: url("../fonts/Flowerspower-Regular.ttf") /* TTF file for CSS3 browsers */
    }
 body {
     background-color: #eee;
@@ -50,6 +50,21 @@ body {
     margin-left: 5em;
     margin-bottom: 1em;
 }
+:root {
+    --info-color: #0099CC;
+  }
+  
+  .btn-toggle-pass {
+    border: none;
+    position: absolute;
+    top: 11px;
+    background: transparent;
+    right: 0;
+  }
+  
+  .btn-toggle-pass.active {
+    color: var(--info-color);
+  }
 
 #msgDiv {
    display: none;
@@ -72,6 +87,7 @@ body {
     font-family: DS-DIGIT;
     color: black;
     text-align: center;
+    background-color: white;
 }
 #home-summary-row {
     color: palevioletred;

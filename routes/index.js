@@ -58,6 +58,7 @@ router.post('/register',
 			const user = new User({
 				username: req.body.username,
 				password: encpassword,
+				days: 7
 			});
 			//saving new user
 			try {
@@ -93,18 +94,11 @@ router.post('/login', async (req, res) =>  {
 			if(user.password != password) {
 				return res.json({status: 'error', message : 'Incorrect password.'});
 			}
+			//reset days settings everytime at log-in
+			user.days = 7;
+			user.save();
 			//redirect url
 			const url = '/users/'+username;
-			/** 
-			req.session.user = user; //store to session
-			req.session.save(function(err) {//save
-				if(err) {
-				  res.end('session save error: ' + err)
-				  return
-				}
-			
-			return res.json({status: 'success', redirect: url});
-			})*/
 
 			//generating a token and sending to client
 			jwt.sign({user: user}, process.env.ACCESS_TOKEN_SECRET, (err, token) => {
@@ -114,7 +108,6 @@ router.post('/login', async (req, res) =>  {
 					expires: 0 
 				   };
 				res.cookie('token', token, cookieOptions);
-				//res.redirect(url);
 				res.json({status: 'success', redirect: url});
 			});
 		}
