@@ -42,18 +42,17 @@ body {
     max-width: 350px;
     padding: 15px;
     margin: 0 auto;
-    background-color: #fff;
+    background: transparent;
     border-radius: 0.3em;
 }
 
 *[role="form"] h2 {
+    border: none;
     margin-left: 5em;
     margin-bottom: 1em;
 }
-:root {
-    --info-color: #0099CC;
-  }
-  
+
+
   .btn-toggle-pass {
     border: none;
     position: absolute;
@@ -63,7 +62,7 @@ body {
   }
   
   .btn-toggle-pass.active {
-    color: var(--info-color);
+    color: #0099CC
   }
 
 #msgDiv {

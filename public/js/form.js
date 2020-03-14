@@ -1,23 +1,14 @@
 (($) => {
+
     class Toggle {
-      constructor(element, options) {
-        this.defaults = {
-          icon: 'fa-eye'
-        };
   
-        this.options = this.assignOptions(options);
-  
+      constructor(element, options) {         
         this.$element = element;
-        this.$button = $(`<button class="btn-toggle-pass"><i class="fa ${this.options.icon}"></i></button>`);
-  
+        this.$button = $(`<button class="btn-toggle-pass"><i class="far fa-eye"></i></button>`);
         this.init();
       };
   
-      assignOptions(options) {
-  
-        return $.extend({}, this.defaults, options);
-      }
-  
+     
       init() {
   
         this._appendButton();
@@ -44,9 +35,9 @@
       }
     }
   
-    $.fn.togglePassword = function (options) {
+    $.fn.togglePassword = function () {
       return this.each(function () {
-        new Toggle($(this), options);
+        new Toggle($.this);
       });
     }
   
@@ -54,9 +45,6 @@
   
   $(document).ready(function() {
     $('#rpassword').togglePassword();
-    $('#cpassword').togglePassword();
-    $('#password').togglePassword({
-        'icon': 'fa-lock'
-    });
+    $('#password').togglePassword();
   })
   
