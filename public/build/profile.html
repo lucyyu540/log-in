@@ -1,41 +1,198 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>Profile</title>
-        <link rel = 'stylesheet', href='../style.css'>
+        <link rel = "stylesheet" type="text/css" href='../css/style.css'>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <!-- Material Design Bootstrap -->
+        <link rel="stylesheet" href="../css/mdb.min.css">
+         <!-- MDB icon -->
+         <link rel="icon" href="../img/mdb-favicon.ico" type="image/x-icon">
+         <!-- Font Awesome -->
+         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     </head>
-    <body>
-        <div class="container">
-            <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
-        </div>
-        <div class="container">
-            <h2 class="text-center top-buffer">Register</h2>
-            <form class="form-horizontal" role="form" method="post" id = 'register-form'>
-                <div class="form-group">
-                    <div class="alert alert-danger" role="alert" id="msgDiv"></div>
-                </div>
-                <div class="form-group"><label class="col-sm-3 control-label" for="username"> <strong>Username</strong></label>
-                    <div class="col-sm-9"><input class="form-control" id="username" type="text" placeholder="Username" autofocus="" value="" /></div>
-                </div>
-                <div class="form-group"><label class="col-sm-3 control-label" for="password"> <strong>Password</strong></label>
-                    <div class="col-sm-9"><input class="form-control" id="password" type="text" placeholder="Password" autofocus="" value="" /></div>
-                </div>
-                <div class="form-group"><label class="col-sm-10 control-label" for="cpassword"> <strong>Confirm Password</strong></label>
-                    <div class="col-sm-9"><input class="form-control" id="cpassword" type="text" placeholder="Password" autofocus="" value="" /></div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9 col-sm-offset-3"><button class="btn btn-primary btn-block" id="register" type="e">Register</button></div>
-                </div>
-                
-            </form>
-        </div>
 
+    <body>
+        <button type="button" class="btn btn-link" id='back'><i class="fas fa-angle-left"></i></button>
+        <div class="container">
+            <h2 class="text-center top-buffer"><i class="far fa-user-circle fa-8x"></i></h2>
+            <h2 class="text-center top-buffer" id='username'></h2>
+            <div class=" col-sm-9 md-form" > 
+                <i id = 'editFirstName' class="far fa-edit"></i>
+                <span id='originalFirstName'></span>
+                <div class='input-group'>
+                    <input style='display:none' type="text" id='newFirstName' class="col-sm-9 form-control" placeholder='Edit first name'>
+                    <span>
+                        <button style = 'display:none' type="button" class="btn btn-link" id = 'enterNewFirstName'>
+                            <i class="fas fa-angle-right"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class=" col-sm-9 md-form" > 
+                <i  id = 'editMiddleName' class="far fa-edit"></i></button>
+                <span id='originalMiddleName'></span>
+                <div class = 'input-group'>
+                    <input style='display:none' type="text" id='newMiddleName' class="col-sm-9 form-control" placeholder='Edit middle name'>
+                    <span>
+                        <button style = 'display:none' type="button" class="btn btn-link" id = 'enterNewMiddleName'>
+                            <i class="fas fa-angle-right"></i>
+                        </button>
+                    </span>
+                </div>
+            
+            </div>
+            <div class=" col-sm-9 md-form" > 
+                <i id = 'editLastName' class="far fa-edit"></i></button>
+                <span id='originalLastName'></span>
+                <div class='input-group'>
+                    <input style='display:none' type="text" id='newLastName' class="col-sm-9 form-control" placeholder='Edit last name'>
+                    <span>
+                        <button style = 'display:none' type="button" class="btn btn-link" id = 'enterNewLastName'>
+                            <i class="fas fa-angle-right"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+                
 
     </body>
-    
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script></script>
+
+  <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- jQuery -->
+  <script type="text/javascript" src="../js/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="../js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="../js/mdb.min.js"></script>
+    <script>
+        
+        $(window).on('load', function(event) {
+            console.log('profile window loaded');
+            event.preventDefault();
+            $.ajax({
+                url: '/users/:username/profile/load',
+                method: 'GET',
+            }).done(function(data) {
+                $('#username').html('@'+data.username);
+                if (data.firstName) {
+                    $('#originalFirstName').html(data.firstName);
+                }
+                else {
+                    $('#originalFirstName').html('Edit to add a first name');
+                }
+                if (data.middleName) {
+                    $('#originalMiddleName').html(data.middleName);
+                }
+                else {
+                    $('#originalMiddleName').html('Edit to add a middle name');
+                }
+                if (data.lastName) {
+                    $('#originalLastName').html(data.lastName);
+                }
+                else {
+                    $('#originalLastName').html('Edit to add a last name');
+                }
+            });
+
+        });
+        //edit name clicked
+        $('#editFirstName').on('click', function (event) {
+            event.preventDefault();
+            if ($('#editFirstName').hasClass('clicked')) {
+                $('#editFirstName').removeClass('clicked');
+                $('#newFirstName').hide();
+                $('#enterNewFirstName').hide();
+            }
+            else {
+                $('#editFirstName').addClass('clicked');
+                $('#newFirstName').show();
+                $('#enterNewFirstName').show();
+            }
+        });
+        $('#editMiddleName').on('click', function (event) {
+            event.preventDefault();
+            if ($('#editMiddleName').hasClass('clicked')) {
+                $('#editMiddleName').removeClass('clicked');
+                $('#newMiddleName').hide();
+                $('#enterNewMiddleName').hide();
+            }
+            else {
+                $('#editMiddleName').addClass('clicked');
+                $('#newMiddleName').show();
+                $('#enterNewMiddleName').show();
+            }
+        });
+        $('#editLastName').on('click', function (event) {
+            event.preventDefault();
+            if ($('#editLastName').hasClass('clicked')) {
+                $('#editLastName').removeClass('clicked');
+                $('#newLastName').hide();
+                $('#enterNewLastName').hide();
+            }
+            else {
+                $('#editLastName').addClass('clicked');
+                $('#newLastName').show();
+                $('#enterNewLastName').show();
+            }
+        })
+        
+        //enter new name
+        $('#enterNewFirstName, #enterNewMiddleName, #enterNewLastName').on('click', function(event) {
+            event.preventDefault();
+            var change; var name;
+            if ($(this).attr('id') == 'enterNewFirstName') {
+                change = 'first';
+                name = $('#newFirstName').val();
+            }
+            else if ($(this).attr('id') == 'enterNewMiddleName') {
+                change = 'middle';
+                name = $('#newMiddleName').val();
+            }
+            else {
+                change = 'last';
+                name = $('#newLastName').val();
+            }
+            console.log('enter clicked');
+            var obj = JSON.stringify({
+                change : change,
+                name: name
+            });
+            console.log(obj);
+            $.ajax({
+                url: '/users/:username/profile/enter',
+                method: 'PUT',
+                data: obj,
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+            }).done(function() {
+                console.log('ajax went through in entering new first name');
+                location.reload(true);
+            });
+
+        });
+
+        //redirect to home.html
+        $('#back').on('click', (event)=> {
+            event.preventDefault();
+            console.log('back button clicked');
+            var temp = window.location.pathname.split("/");
+            console.log(temp);
+            // '' , users, username , profile
+            //  /users/username
+            var pathname = '/users/'+temp[2];
+            console.log(pathname);
+            window.location = pathname;            
+        });
+
+
+    </script>
 
 </html>

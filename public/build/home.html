@@ -3,17 +3,42 @@
     <head>
         <title>Home</title>
         <link rel = "stylesheet" type="text/css" href='../css/style.css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="../css/bootstrap.min.css">
         <!-- Material Design Bootstrap -->
         <link rel="stylesheet" href="../css/mdb.min.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-\    </head>
+         <!-- MDB icon -->
+         <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon">
+         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    </head>
+    <header>
+      <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+        <!-- Breadcrumb-->
+        <ul class="nav navbar-nav nav-flex-icons ml-auto">
+          <li class="nav-item">
+            <a class="nav-link"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"><i class="fas fa-comments"></i> <span class="clearfix d-none d-sm-inline-block">Support</span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-user"></i>
+              Account
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#" id = 'profileLink'>Profile</a>
+              <a class="dropdown-item"  href="#">Log Out</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.Navbar -->
+    </header>
+    <!--/.Double navigation-->
     <body>
-        
-        <button type="button" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-user"></span> Profile 
-          </button>
         <h2 id = 'welcome-message' class="text-center top-buffer">Welcome</h2>
         <div class = "container" id = 'home-summary'>
             <div class = "row" id = 'home-summary-row'>
@@ -25,9 +50,9 @@
                 <div class="col" class="text-center" id = 'spendings'></div>
             </div>
             <div class = "row">
-                <div class = "col timeFrame" id = '24'>the past 24 hours</div>
-                <div class = "col chosenTimeFrame" id = '7'>the past 7 days</div>
-                <div class = "col timeFrame" id ='30'>the past 30 days</div>
+                <div class = "col" id = '24'>the past 24 hours</div>
+                <div class = "col" id = '7'>the past 7 days</div>
+                <div class = "col" id ='30'>the past 30 days</div>
             </div>
             <div class = "row" id = 'home-summary-row'>
                 <!-- EARNING FORM -->
@@ -38,17 +63,20 @@
                     </div>
                     <div class="form-group">
                         <!-- option to expand to add a new earning -->
-                        <a href="#" id = 'addEarning'>
-                            <span id = 'sign' class="glyphicon glyphicon-plus-sign"></span>
-                            <label class="col-sm-3 control-label" for="earning">Earning</label>
-                        </a>
+                        <button id='addEarning' class='btn btn-link'>
+                            <i id='signEarning' class="fas fa-plus-circle"></i>
+                            <label class="control-label">Earning</label>
+                        </button>
+                       
                         <!-- expand these -->
-                        <div id = 'addEarningDetails' style='display: none'>
+                        <div id = 'addEarningDetails' style='display: none' class="md-form">
                             <input class="form-control" id="earning" type="text" placeholder="$0.00" autofocus="" value="" />
-                            <select class="form-control" id="tagsEarning"></select>
+                            <select class="browser-default custom-select" id="tagsEarning"></select>
                         </div>
                         <!-- expand this if user chooses to add a tag -->
-                        <input style='display:none' class='form-control' id ='newTagEarning' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
+                        <div class="md-form">
+                            <input style='display:none'  class="form-control" id ='newTagEarning' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
+                        </div>
 
                     </div>
                     <div class="form-group">
@@ -61,15 +89,19 @@
                         <div class="alert alert-danger" role="alert" id="msgDiv" ></div>
                     </div>
                     <div class="form-group">
-                        <a href='#' id = 'addSpending'>
-                            <span id = 'signSpending' class="glyphicon glyphicon-plus-sign"></span>
-                            <label class="col-sm-3 control-label" for="earning">Spending</label>
-                        </a>
-                        <div id = 'addSpendingDetails' style = 'display: none'>
+                        <button id = 'addSpending' class = 'btn btn-link'>
+                            <i id='signSpending' class="fas fa-plus-circle"></i>
+                            <label class="control-label">Spending</label>
+                        </button>
+
+
+                        <div id = 'addSpendingDetails' style = 'display: none' class="md-form">
                             <input class="form-control" id="spending" type="text" placeholder="$0.00" autofocus="" value="" />
-                            <select class="form-control" id="tagsSpending"></select>
+                            <select class="browser-default custom-select" id="tagsSpending"></select>
                         </div>
-                        <input style='display:none' class='form-control' id ='newTag' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
+                        <div class="md-form">
+                            <input style='display:none' class='form-control' id ='newTag' type='text' placeholder='Enter new tag name' autofocus = '' value = '' />
+                        </div>
                     </div>
                     <div class="form-group">
                             <button style = 'display: none' class="btn btn-primary btn-block" id="enterSpending" type="e">Enter</button>
@@ -91,8 +123,8 @@
         
 
     </body>
-    <!-- jQuery -->
-  <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!-- jQuery -->
   <!-- Bootstrap tooltips -->
   <script type="text/javascript" src="../js/popper.min.js"></script>
   <!-- Bootstrap core JavaScript -->
@@ -191,6 +223,7 @@
 
         });
         
+        //display settings
         $('#24').on('click', function(event) {
             event.preventDefault();
             if (this.className == 'col chosenTimeFrame') {//do nothing
@@ -210,7 +243,6 @@
                 location.reload(true);
             })
         });
-
         $('#7').on('click', function(event) {
             event.preventDefault();
             if (this.className == 'col chosenTimeFrame') {//do nothing
@@ -252,16 +284,16 @@
             })
         });
 
-        //hide and show earning entry details
+        //hide and show display settings
         $('#addEarning').on('click', event => {
             if ($('#addEarningDetails').is(':visible')) {
-                $('#sign').toggleClass('glyphicon glyphicon-plus-sign').toggleClass('glyphicon glyphicon-minus-sign');
+                $('#signEarning').toggleClass("fas fa-minus-circle").toggleClass("fas fa-plus-circle");
                 $('#addEarningDetails').hide();
                 $('#newTagEarning').hide();
                 $('#enterEarning').hide();
             }
              else {
-                $('#sign').toggleClass('glyphicon glyphicon-minus-sign').toggleClass('glyphicon glyphicon-plus-sign');
+                $('#signEarning').toggleClass("fas fa-plus-circle").toggleClass("fas fa-minus-circle");
                 $('#addEarningDetails').show();
                 $('#enterEarning').show();
                 if ($('#tagsEarning').val() == 'Add new tag') {
@@ -269,17 +301,15 @@
                 }
              }
         });
-        
-        //hide and show spending entry details
         $('#addSpending').on('click', event => {
             if ($('#addSpendingDetails').is(':visible')) {
-                $('#signSpending').toggleClass('glyphicon glyphicon-plus-sign').toggleClass('glyphicon glyphicon-minus-sign');
+                $('#signSpending').toggleClass("fas fa-minus-circle").toggleClass("fas fa-plus-circle");
                 $('#addSpendingDetails').hide();
                 $('#newTag').hide();
                 $('#enterSpending').hide();
             }
              else {
-                $('#signSpending').toggleClass('glyphicon glyphicon-minus-sign').toggleClass('glyphicon glyphicon-plus-sign');
+                $('#signSpending').toggleClass("fas fa-plus-circle").toggleClass("fas fa-minus-circle");
                 $('#addSpendingDetails').show();
                 if ($('#tagsSpending').val() == 'Add new tag') {
                     $('#newTag').show();
@@ -288,7 +318,6 @@
 
              }
         });
-        
         //custom new tag hide and show
         $('#tagsEarning').change( event => {
             if ($('#tagsEarning').val() == 'Add new tag') {
@@ -395,6 +424,13 @@
             }
         });
     
+        //click on profile --> move page
+        $('#profileLink').on('click', (event) => {
+            event.preventDefault();
+            console.log('profile link clicked');
+            var pathname = window.location.pathname+'/profile'
+            window.location = pathname; 
+        })
     </script>
 
 </html>

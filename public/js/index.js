@@ -80,13 +80,42 @@ $(function(){
                 if ( data ) {
                     if(data.status == 'error'){
                         $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(data.message).show();
-                        $('#login-form')[0].reset();
                     }
                     else{//status == success        
                         window.location = data.redirect;
                     }
+                    $('#login-form')[0].reset();
                 }
             });
+        }
+    });
+
+    $('#rpasswordEye').on('click', function(event) {
+        event.preventDefault();
+        
+        if ($('#rpasswordEye').hasClass('clicked')) {
+            $('#rpasswordEye').removeClass('clicked');
+            $('#rpassword').prop('type', 'password');
+        }
+        else {
+            $('#rpasswordEye').addClass('clicked');
+            $('#rpassword').prop('type', 'text');
+        }
+    });
+    $('#passwordEye, #cpasswordEye').on('click', function(event) {
+        event.preventDefault();
+        if ($(this).hasClass('clicked')) {
+            $('#passwordEye').removeClass('clicked');
+            $('#cpasswordEye').removeClass('clicked');
+            $('#password').prop('type', 'password');
+            $('#cpassword').prop('type', 'password');
+        }
+        else {
+            $('#passwordEye').addClass('clicked');
+            $('#cpasswordEye').addClass('clicked');
+            $('#password').prop('type', 'text');
+            $('#cpassword').prop('type', 'text');
+
         }
     });
 });

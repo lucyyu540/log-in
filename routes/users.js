@@ -6,9 +6,14 @@ const User = require('../models/User');
 const router = express.Router();
 var path = require('path');
 
+router.use(express.static(path.join(__dirname+ '/../public'))); 
+/** 
+router.use("/css",  express.static(__dirname + '/../public/css'));
+router.use("/js", express.static(__dirname + '/../public/js'));
+router.use("/img",  express.static(__dirname + '/../public/img')); 
+*/
 
-router.get('/:username',
-     (req, res) => {
+router.get('/:username', (req, res) => {
         console.log('in endpoint users/username. now rendering home page');
         res.sendFile('home.html', 
             {root: path.join(__dirname+ '/../public/build')},
@@ -17,16 +22,12 @@ router.get('/:username',
                     console.log('home page cannot load');
                     res.status(err.status).end();
                 }
-                console.log('in res.sendFile');
             });
 });
 
 //on home page loading, 
 router.post('/:username/list', async (req, res, next) => {
     console.log('on home page load, list');
-    //const username = res.locals.user.user.username;
-    //const days = res.locals.user.user.days;
-    //calculateSpendingEarning(req, res, username, days);
     try {
         var user = await User.findOne({username: res.locals.user.user.username});
         var days = user.days;
@@ -69,10 +70,8 @@ router.post('/:username/list', async (req, res, next) => {
         //changing maps into array
         var earningSorted = [];
         var spendingSorted = [];
-        console.log('for each in earning map: ');
         earningMap.forEach((value, key, map) => {
             earningSorted.push(value);
-            console.log(value);
         })
         spendingMap.forEach((value, key, map) => {
             spendingSorted.push(value);
@@ -202,5 +201,59 @@ router.post('/:username/add-spending',  async (req, res) => {
 
 });
 
-    
+router.get('/:username/profile', (req, res) => {
+    console.log('sending the profile.html file');
+    res.sendFile('profile.html', 
+        {root: path.join(__dirname+ '/../public/build')},
+        err => {
+            if (err) {
+                console.log('profile page cannot load');
+                res.status(err.status).end();
+            } 
+        }
+    );
+});
+
+router.get('/:username/profile/load', async (req, res)=> {
+    console.log('load profile called');
+    try {
+        var user = await User.findOne({username: res.locals.user.user.username});
+        result = {
+            username: user.username,
+            firstName: user.firstName,
+            middleName: user.middleName,
+            lastName: user.lastName
+        }
+        res.json(result);
+    }
+    catch (err) {
+        console.log('error in loading profile');
+    }
+});
+
+router.put('/:username/profile/enter', async (req, res) => {
+    console.log(req.body);
+    try {
+        var user = await User.findOne({username: res.locals.user.user.username});
+        if (req.body.change == 'first'){
+            user.firstName = req.body.name;
+            res.locals.user.user.firstName = req.body.name;
+        }
+        else if (req.body.change == 'middle'){
+            user.middleName = req.body.name;
+            res.locals.user.user.middleName = req.body.name;
+        }
+        else if (req.body.change == 'last'){
+            user.lastName = req.body.name;
+            res.locals.user.user.lastName = req.body.name;
+        }
+        user.save();
+        return;
+    }
+    catch (err) {
+        console.log('error');
+    }
+   
+});
+
 module.exports = router;

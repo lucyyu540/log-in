@@ -1,4 +1,4 @@
-//dependencies
+/**dependencies*/
 //routes
 const userRoute = require('./routes/users');
 const indexRoute = require('./routes/index');
@@ -19,10 +19,16 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');//login authentication
 
-app.use(express.static(path.join(__dirname, 'public/build')));
+/**static files */
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'models')));
+app.use(express.static(path.join(__dirname, 'public/build')));
+app.use(express.static(path.join(__dirname, 'public/css')));
+app.use(express.static(path.join(__dirname, 'public/img')));
+app.use(express.static(path.join(__dirname, 'public/js')));
+app.use(express.static(path.join(__dirname, 'public/scss')));
 app.use(express.static(path.join(__dirname, 'public/fonts')));
+app.use(express.static(path.join(__dirname, 'models')));
+
 
 app.use(logger('dev'));
 
@@ -42,20 +48,19 @@ app.use(session({ secret: 'keyboard cat',
 app.use(passport.initialize());
 app.use(passport.session());
 
-/**ROUTES */
-app.use('/users', checkSignIn, userRoute);
+//routes
+app.use('/users', checkSignIn, userRoute);//protected routes
 app.use('/', indexRoute);
 
 
-/**ERROR */
 //middleware function verifying token for all protected endpoints
 function checkSignIn(req, res, next) {
 	//get auth header value
 	console.log('in middleware function checksignin: ');
+	//console.log(req.cookies);
 	const token = req.cookies.token;
 	//check if token is undefined
 	if (token != undefined) {
-		console.log('token exists in cookies');
 		jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
 			if (err) {
 				res.clearCookie('token');
@@ -69,23 +74,16 @@ function checkSignIn(req, res, next) {
 		})
 	}
 	else {
-		return res.send(401, 'Invalid or missing token');
+		return res.send(401, 'Invalid or missing token').end();
 	}
-	/** 
-    if(typeof req.session.user == undefined) {
-		console.log('not authorized redirecting to log-in page');
-		res.redirect('/');
-		return;
-	}
-    next();*/
 }
 
+// error handler
 app.use(function(req, res, next) {
 	var err = new Error('Not Found');
 	err.status = 404;
 	next(err);
   });
-// error handler
 app.use(function(err, req, res, next) {
 	// set locals, only providing error in development
 	res.locals.message = err.message;
