@@ -30,7 +30,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="#" id = 'profileLink'>Profile</a>
-              <a class="dropdown-item"  href="#">Log Out</a>
+              <a class="dropdown-item"  href="#" id='logOutLink'>Log Out</a>
             </div>
           </li>
         </ul>
@@ -430,6 +430,21 @@
             console.log('profile link clicked');
             var pathname = window.location.pathname+'/profile'
             window.location = pathname; 
+        })
+        
+        $('#logOutLink').on('click', (event) => {
+            event.preventDefault();
+            console.log('log out link clicked');
+            $.ajax({
+                url: '/users/:username/log-out',
+                method: "GET",
+                contentType: "application/json; charset=utf-8",
+            }).done (function(read) {
+                console.log(read.status);
+                window.location = '/';
+            }).fail(function() {
+                console.log('failed');
+            })
         })
     </script>
 

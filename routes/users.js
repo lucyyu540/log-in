@@ -201,6 +201,7 @@ router.post('/:username/add-spending',  async (req, res) => {
 
 });
 
+//rendering profile.html
 router.get('/:username/profile', (req, res) => {
     console.log('sending the profile.html file');
     res.sendFile('profile.html', 
@@ -213,7 +214,7 @@ router.get('/:username/profile', (req, res) => {
         }
     );
 });
-
+//loading data onto profile page
 router.get('/:username/profile/load', async (req, res)=> {
     console.log('load profile called');
     try {
@@ -230,30 +231,51 @@ router.get('/:username/profile/load', async (req, res)=> {
         console.log('error in loading profile');
     }
 });
-
+//changing user name (first,middle, or last)
 router.put('/:username/profile/enter', async (req, res) => {
     console.log(req.body);
+    //validate name
+    if (!/^[a-zA-Z\- ]+$/.test(req.body.name)) {
+        return res.json({status: 'error', message: 'All characters must be values a to z, A to Z, -, or space!'});
+    }
     try {
+        var message; 
         var user = await User.findOne({username: res.locals.user.user.username});
         if (req.body.change == 'first'){
             user.firstName = req.body.name;
             res.locals.user.user.firstName = req.body.name;
+            message = 'First name successfully updated! Page refreshing...'
         }
         else if (req.body.change == 'middle'){
             user.middleName = req.body.name;
             res.locals.user.user.middleName = req.body.name;
+            message = 'Middle name successfully updated! Page refreshing...'
         }
         else if (req.body.change == 'last'){
             user.lastName = req.body.name;
             res.locals.user.user.lastName = req.body.name;
+            message = 'Last name successfully updated! Page refreshing...'
         }
         user.save();
-        return;
+        return res.json({status: 'success', message: message});
     }
     catch (err) {
-        console.log('error');
+        return res.json({status: 'error', message: 'Error in updating name!'});
     }
    
 });
+
+router.get('/:username/log-out', (req, res) => {
+    console.log('in backend log out');
+    console.log(req.cookies);
+    try {
+        res.clearCookie('token');
+        return res.json({status: 'success'})
+    }
+    catch (err) {
+        console.log(err);
+        return res.json({status: 'error'})
+    }
+})
 
 module.exports = router;

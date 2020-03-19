@@ -47,6 +47,7 @@ $(function(){
                 }
             });
         }
+        $('registerForm').hide();
     });
 
     /**LOG IN */
@@ -89,6 +90,7 @@ $(function(){
             });
         }
     });
+
 
     $('#rpasswordEye').on('click', function(event) {
         event.preventDefault();

@@ -16,15 +16,19 @@
     </head>
 
     <body>
+        
         <button type="button" class="btn btn-link" id='back'><i class="fas fa-angle-left"></i></button>
         <div class="container">
+            <div class="form-group">
+                <div class="alert alert-danger" role="alert" id="msgDiv"></div>
+            </div>
             <h2 class="text-center top-buffer"><i class="far fa-user-circle fa-8x"></i></h2>
             <h2 class="text-center top-buffer" id='username'></h2>
             <div class=" col-sm-9 md-form" > 
                 <i id = 'editFirstName' class="far fa-edit"></i>
                 <span id='originalFirstName'></span>
                 <div class='input-group'>
-                    <input style='display:none' type="text" id='newFirstName' class="col-sm-9 form-control" placeholder='Edit first name'>
+                    <input style='display:none' type="text" id='newFirstName' class="col-sm-9 form-control" placeholder='New first name'>
                     <span>
                         <button style = 'display:none' type="button" class="btn btn-link" id = 'enterNewFirstName'>
                             <i class="fas fa-angle-right"></i>
@@ -36,7 +40,7 @@
                 <i  id = 'editMiddleName' class="far fa-edit"></i></button>
                 <span id='originalMiddleName'></span>
                 <div class = 'input-group'>
-                    <input style='display:none' type="text" id='newMiddleName' class="col-sm-9 form-control" placeholder='Edit middle name'>
+                    <input style='display:none' type="text" id='newMiddleName' class="col-sm-9 form-control" placeholder='New middle name'>
                     <span>
                         <button style = 'display:none' type="button" class="btn btn-link" id = 'enterNewMiddleName'>
                             <i class="fas fa-angle-right"></i>
@@ -49,7 +53,7 @@
                 <i id = 'editLastName' class="far fa-edit"></i></button>
                 <span id='originalLastName'></span>
                 <div class='input-group'>
-                    <input style='display:none' type="text" id='newLastName' class="col-sm-9 form-control" placeholder='Edit last name'>
+                    <input style='display:none' type="text" id='newLastName' class="col-sm-9 form-control" placeholder='New last name'>
                     <span>
                         <button style = 'display:none' type="button" class="btn btn-link" id = 'enterNewLastName'>
                             <i class="fas fa-angle-right"></i>
@@ -73,7 +77,7 @@
   <!-- MDB core JavaScript -->
   <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script>
-        
+
         $(window).on('load', function(event) {
             console.log('profile window loaded');
             event.preventDefault();
@@ -172,9 +176,20 @@
                 data: obj,
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
-            }).done(function() {
+            }).done(function(read) {
                 console.log('ajax went through in entering new first name');
-                location.reload(true);
+                if (read.status == 'success') {
+                    $("#msgDiv").removeClass('alert-danger').addClass('alert-success').html(read.message).show(); 
+                    setTimeout(function(){// wait for 3 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 3000); 
+                }
+                else {
+                    $("#msgDiv").removeClass('alert-sucess').addClass('alert-danger').html(read.message).show();
+                    $('#newFirstName').val('');
+                    $('#newMiddleName').val('');
+                    $('#newLastName').val('');
+                }
             });
 
         });
